@@ -12,6 +12,7 @@ class CardCollectionViewLayout: UICollectionViewLayout {
   var itemSize: CGSize!
   var spacing: CGFloat!
   var maximumVisibleItems: Int!
+  var itemsCount: Int!
   
   override open func prepare() {
     super.prepare()
@@ -20,14 +21,14 @@ class CardCollectionViewLayout: UICollectionViewLayout {
     self.itemSize = CGSize(width: 250, height: 400)
     self.spacing  = 16.0
     self.maximumVisibleItems = 4
+    self.itemsCount = collectionView!.numberOfItems(inSection: 0)
   }
   
   // Returns the width and height of the collection view’s contents.
   override var collectionViewContentSize: CGSize {
     if collectionView == nil { return CGSize.zero }
     
-    let itemsCount = CGFloat(collectionView!.numberOfItems(inSection: 0))
-    return CGSize(width: collectionView!.bounds.width * itemsCount,
+    return CGSize(width: collectionView!.bounds.width * CGFloat(itemsCount),
                   height: collectionView!.bounds.height)
   }
   
@@ -36,9 +37,8 @@ class CardCollectionViewLayout: UICollectionViewLayout {
   override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
     if collectionView == nil { return nil }
   
-    let totalItemsCount = collectionView!.numberOfItems(inSection: 0)
     let minVisibleIndex = Int(collectionView!.contentOffset.x) / Int(collectionView!.bounds.width)
-    let maxVisibleIndex = min(totalItemsCount, minVisibleIndex + maximumVisibleItems)
+    let maxVisibleIndex = min(itemsCount, minVisibleIndex + maximumVisibleItems)
 //    print("collectionView!.contentOffset.y", collectionView!.contentOffset.y)
 //    print("collectionView!.bounds", collectionView!.bounds)
     
